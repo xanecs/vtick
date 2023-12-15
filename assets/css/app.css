@@ -1,0 +1,64 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* This file is for your main application CSS */
+@font-face {
+    font-family: 'FF Sizmo Pro';
+    src: url('/fonts/sizmo/SizmoPro-Demibold.eot');
+    src: local('FF Sizmo Pro DemiBold'), local('SizmoPro-Demibold'),
+        url('/fonts/sizmo/SizmoPro-Demibold.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/sizmo/SizmoPro-Demibold.woff2') format('woff2'),
+        url('/fonts/sizmo/SizmoPro-Demibold.woff') format('woff'),
+        url('/fonts/sizmo/SizmoPro-Demibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'FF Sizmo Pro';
+    src: url('/fonts/sizmo/SizmoPro-Light.eot');
+    src: local('FF Sizmo Pro Light'), local('SizmoPro-Light'),
+        url('/fonts/sizmo/SizmoPro-Light.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/sizmo/SizmoPro-Light.woff2') format('woff2'),
+        url('/fonts/sizmo/SizmoPro-Light.woff') format('woff'),
+        url('/fonts/sizmo/SizmoPro-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'FF Sizmo Pro';
+    src: url('/fonts/sizmo/SizmoPro-Medium.eot');
+    src: local('FF Sizmo Pro Medium'), local('SizmoPro-Medium'),
+        url('/fonts/sizmo/SizmoPro-Medium.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/sizmo/SizmoPro-Medium.woff2') format('woff2'),
+        url('/fonts/sizmo/SizmoPro-Medium.woff') format('woff'),
+        url('/fonts/sizmo/SizmoPro-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'FF Sizmo Pro';
+    src: url('/fonts/sizmo/SizmoPro-Bold.eot');
+    src: local('FF Sizmo Pro Bold'), local('SizmoPro-Bold'),
+        url('/fonts/sizmo/SizmoPro-Bold.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/sizmo/SizmoPro-Bold.woff2') format('woff2'),
+        url('/fonts/sizmo/SizmoPro-Bold.woff') format('woff'),
+        url('/fonts/sizmo/SizmoPro-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'FF Sizmo Pro';
+    src: url('/fonts/sizmo/SizmoPro.eot');
+    src: local('FF Sizmo Pro'), local('SizmoPro'),
+        url('/fonts/sizmo/SizmoPro.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/sizmo/SizmoPro.woff2') format('woff2'),
+        url('/fonts/sizmo/SizmoPro.woff') format('woff'),
+        url('/fonts/sizmo/SizmoPro.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

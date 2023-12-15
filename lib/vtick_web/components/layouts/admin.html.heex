@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-100 [scrollbar-gutter:stable]">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content={get_csrf_token()} />
+    <.live_title suffix=" · Vtick">
+      <%= assigns[:page_title] || "Vtick" %>
+    </.live_title>
+    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
+    </script>
+  </head>
+  <body class="h-full antialiased">
+    <div class="min-h-full">
+      <nav class="bg-gray-800">
+        <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 flex items-center">
+          <div class="h-8">
+            <a
+              href="/admin"
+              class="text-xl text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+            >
+              VTick
+            </a>
+          </div>
+          <div class="ml-6">
+            <div class="flex space-x-4">
+              <a
+                href="/admin/matches"
+                class={"#{if assigns[:active_page] == :matches, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700 hover:text-white"} rounded-md px-3 py-2 text-sm font-medium"}
+              >
+                Match
+              </a>
+              <a
+                href="/admin/players"
+                class={"#{if assigns[:active_page] == :players, do: "bg-gray-900 text-white", else: "text-gray-300 hover:bg-gray-700 hover:text-white"} rounded-md px-3 py-2 text-sm font-medium"}
+              >
+                Players
+              </a>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <header class="bg-white shadow">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <h1 class="text-3xl font-bold tracking-tight text-gray-900">
+            <%= assigns[:page_title] %>
+          </h1>
+        </div>
+      </header>
+
+      <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        <%= @inner_content %>
+      </div>
+    </div>
+  </body>
+</html>
