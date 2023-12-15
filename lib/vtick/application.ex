@@ -9,7 +9,6 @@ defmodule Vtick.Application do
   def start(_type, _args) do
     children = [
       VtickWeb.Telemetry,
-      Vtick.Repo,
       {DNSCluster, query: Application.get_env(:vtick, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Vtick.PubSub},
       # Start the Finch HTTP client for sending emails
