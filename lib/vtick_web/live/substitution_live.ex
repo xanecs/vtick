@@ -243,13 +243,13 @@ defmodule VtickWeb.SubstitutionLive do
           <div class="mask h-32">
             <div class="anim namecontainer">
               <div class="anim playerout">
-                <div class="anim name h-16 bg-vbldarkblue text-white flex items-center text-xl">
+                <div class="anim name h-16 bg-vbldarkblue text-white flex items-center text-2xl">
                   <strong class="mx-6"><%= @player_out["jerseyNumber"] %></strong>
                   <span class="mr-8">
                     <%= @player_out["firstName"] %> <%= @player_out["lastName"] %>
                   </span>
                 </div>
-                <div class="anim position h-16 bg-vblgray text-vbldarkblue flex items-center text-xl">
+                <div class="anim position h-16 bg-vblgray text-vbldarkblue flex items-center text-2xl">
                   <span class="ml-6 mr-8">
                     <%= if Map.has_key?(@position_names, @player_out["position"]),
                       do: @position_names[@player_out["position"]],
@@ -258,13 +258,13 @@ defmodule VtickWeb.SubstitutionLive do
                 </div>
               </div>
               <div class="anim playerin">
-                <div class="h-16 bg-vblgreen text-white flex items-center text-xl">
+                <div class="h-16 bg-vblgreen text-white flex items-center text-2xl">
                   <strong class="mx-6"><%= @player_in["jerseyNumber"] %></strong>
                   <span class="mr-8">
                     <%= @player_in["firstName"] %> <%= @player_in["lastName"] %>
                   </span>
                 </div>
-                <div class="h-16 bg-vblgray text-vbldarkblue flex items-center text-xl">
+                <div class="h-16 bg-vblgray text-vbldarkblue flex items-center text-2xl">
                   <span class="ml-6 mr-8">
                     <%= if Map.has_key?(@position_names, @player_in["position"]),
                       do: @position_names[@player_in["position"]],
@@ -289,13 +289,13 @@ defmodule VtickWeb.SubstitutionLive do
           <div class="mask h-32">
             <div class="anim namecontainer">
               <div class="playerin">
-                <div class="h-16 bg-vblgreen text-white flex items-center text-xl">
+                <div class="h-16 bg-vblgreen text-white flex items-center text-2xl">
                   <strong class="mx-6"><%= @last_player_in["jerseyNumber"] %></strong>
                   <span class="mr-8">
                     <%= @last_player_in["firstName"] %> <%= @last_player_in["lastName"] %>
                   </span>
                 </div>
-                <div class="h-16 bg-vblgray text-vbldarkblue flex items-center text-xl">
+                <div class="h-16 bg-vblgray text-vbldarkblue flex items-center text-2xl">
                   <span class="ml-6 mr-8">
                     <%= if Map.has_key?(@position_names, @last_player_in["position"]),
                       do: @position_names[@last_player_in["position"]],
@@ -305,13 +305,13 @@ defmodule VtickWeb.SubstitutionLive do
               </div>
               <div class="namecontainer">
                 <div class="playerout">
-                  <div class="name h-16 bg-vbldarkblue text-white flex items-center text-xl">
+                  <div class="name h-16 bg-vbldarkblue text-white flex items-center text-2xl">
                     <strong class="mx-6"><%= @last_player_out["jerseyNumber"] %></strong>
                     <span class="mr-8">
                       <%= @last_player_out["firstName"] %> <%= @last_player_out["lastName"] %>
                     </span>
                   </div>
-                  <div class="position h-16 bg-vblgray text-vbldarkblue flex items-center text-xl">
+                  <div class="position h-16 bg-vblgray text-vbldarkblue flex items-center text-2xl">
                     <span class="ml-6 mr-8">
                       <%= if Map.has_key?(@position_names, @last_player_out["position"]),
                         do: @position_names[@last_player_out["position"]],

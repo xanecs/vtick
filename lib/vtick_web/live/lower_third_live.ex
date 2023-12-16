@@ -129,14 +129,14 @@ defmodule VtickWeb.LowerThirdLive do
             </div>
             <div id="mask">
               <div id="text">
-                <div class="h-16 bg-vbldarkblue text-white flex items-center text-xl">
+                <div class="h-16 bg-vbldarkblue text-white flex items-center text-2xl">
                   <span class="ml-6 mr-8">
                     <%= @arbitration[@player_uuid]["firstName"] %> <%= @arbitration[@player_uuid][
                       "lastName"
                     ] %>
                   </span>
                 </div>
-                <div class="h-16 bg-vblgray text-vbldarkblue flex items-center text-xl">
+                <div class="h-16 bg-vblgray text-vbldarkblue flex items-center text-2xl">
                   <span class="ml-6 mr-8">
                     <%= if @player_uuid == "firstReferee",
                       do: "1.",
@@ -155,11 +155,11 @@ defmodule VtickWeb.LowerThirdLive do
             </div>
             <div id="mask">
               <div id="text">
-                <div class="h-16 bg-vbldarkblue text-white flex items-center text-xl">
+                <div class="h-16 bg-vbldarkblue text-white flex items-center text-2xl">
                   <strong class="mx-6"><%= @player["jerseyNumber"] %></strong>
                   <span class="mr-8"><%= @player["firstName"] %> <%= @player["lastName"] %></span>
                 </div>
-                <div class="h-16 bg-vblgray text-vbldarkblue flex items-center text-xl">
+                <div class="h-16 bg-vblgray text-vbldarkblue flex items-center text-2xl">
                   <span class="ml-6 mr-8">
                     <%= if Map.has_key?(@position_names, @player["position"]),
                       do: @position_names[@player["position"]],
