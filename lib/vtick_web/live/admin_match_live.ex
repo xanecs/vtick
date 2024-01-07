@@ -42,6 +42,7 @@ defmodule VtickWeb.AdminMatchLive do
             <div class="min-w-0 flex-auto">
               <p class="text-sm">
                 <%= DateTime.from_unix!(match["date"], :millisecond)
+                |> DateTime.shift_zone!("Europe/Berlin")
                 |> Calendar.strftime("%d.%m.%Y %H:%M") %>
               </p>
               <p><%= match["teamDescription1"] %> - <%= match["teamDescription2"] %></p>

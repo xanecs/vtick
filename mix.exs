@@ -51,7 +51,8 @@ defmodule Vtick.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:plug_cowboy, "~> 2.5"},
-      {:websockex, git: "https://github.com/RaphSfeir/websockex"}
+      {:websockex, git: "https://github.com/RaphSfeir/websockex"},
+      {:tz, "~> 0.26.5"}
     ]
   end
 

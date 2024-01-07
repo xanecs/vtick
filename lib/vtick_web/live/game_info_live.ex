@@ -61,6 +61,7 @@ defmodule VtickWeb.GameInfoLive do
         </div>
         <div class="bg-vblgray p-4 w-4/6 text-center text-vbldarkblue text-2xl">
           <%= DateTime.from_unix!(@match["date"], :millisecond)
+          |> DateTime.shift_zone!("Europe/Berlin")
           |> Calendar.strftime("%d.%m.%Y / %H:%M Uhr") %>
         </div>
       </div>

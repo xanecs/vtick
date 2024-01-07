@@ -74,7 +74,7 @@ defmodule VtickWeb.LowerThirdLive do
 
       @keyframes slideout {
         0% {
-          transform: translateX(-100%);
+          transform: translateX(-105%);
         }
         100% {
           transform: translateX(0);
@@ -86,7 +86,7 @@ defmodule VtickWeb.LowerThirdLive do
           transform: translateX(0);
         }
         100% {
-          transform: translateX(-100%);
+          transform: translateX(-105%);
         }
       }
 

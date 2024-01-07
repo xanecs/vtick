@@ -3,7 +3,6 @@ defmodule VtickWeb.SubstitutionLive do
   alias Vtick.TickerState
   alias Vtick.Ticker
   alias Vtick.MatchSelector
-  alias Vtick.PlayerSelector
 
   def mount(_params, _session, socket) do
     VtickWeb.Endpoint.subscribe("ticker")
@@ -106,7 +105,7 @@ defmodule VtickWeb.SubstitutionLive do
 
       @keyframes namecontainer {
         0%, 5% {
-          transform: translateX(-100%);
+          transform: translateX(-105%);
         }
         10%, 100% {
           transform: translateY(0);
@@ -165,7 +164,7 @@ defmodule VtickWeb.SubstitutionLive do
           transform: translateX(0%);
         }
         50%, 100% {
-          transform: translateX(-100%);
+          transform: translateX(-105%);
         }
       }
 
