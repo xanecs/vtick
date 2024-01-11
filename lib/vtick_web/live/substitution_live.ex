@@ -7,7 +7,7 @@ defmodule VtickWeb.SubstitutionLive do
   def mount(_params, _session, socket) do
     VtickWeb.Endpoint.subscribe("ticker")
     VtickWeb.Endpoint.subscribe("match_selector")
-    # Process.send(self(), {:ticker, TickerState.get_state()}, [])
+    Process.send(self(), {:ticker, TickerState.get_state()}, [])
     ticker = TickerState.get_state()
     match_uuid = MatchSelector.get_match_uuid()
     state = ticker |> Ticker.state(match_uuid)
@@ -23,29 +23,17 @@ defmodule VtickWeb.SubstitutionLive do
       socket
       |> assign(:ticker, ticker)
       |> assign(:match_uuid, match_uuid)
-      |> assign(:substitutions, :queue.new())
-      |> assign(:last_sub, nil)
-      |> assign(:latest_event_uuid, latest_event_uuid)
+      |> assign(:substitutions_queue, :queue.new())
+      |> assign(:latest_event_uuid, nil)
+      |> stream_configure(:substitutions, dom_id: &"sub-#{Map.get(&1, "uuid")}")
+      |> stream(:substitutions, [])
+
+    # |> assign(:latest_event_uuid, latest_event_uuid)
 
     {:ok, socket}
   end
 
   def render(assigns) do
-    last_player_in =
-      assigns.ticker |> Ticker.player(assigns.match_uuid, assigns.last_sub["playerInUuid"])
-
-    last_player_out =
-      assigns.ticker |> Ticker.player(assigns.match_uuid, assigns.last_sub["playerOutUuid"])
-
-    current_sub =
-      case assigns.substitutions |> :queue.peek() do
-        :empty -> nil
-        {:value, sub} -> sub
-      end
-
-    player_in = assigns.ticker |> Ticker.player(assigns.match_uuid, current_sub["playerInUuid"])
-    player_out = assigns.ticker |> Ticker.player(assigns.match_uuid, current_sub["playerOutUuid"])
-
     match =
       assigns.ticker
       |> Ticker.match(assigns.match_uuid)
@@ -65,12 +53,7 @@ defmodule VtickWeb.SubstitutionLive do
 
     assigns =
       assigns
-      |> assign(:player_in, player_in)
-      |> assign(:player_out, player_out)
-      |> assign(:last_player_in, last_player_in)
-      |> assign(:last_player_out, last_player_out)
       |> assign(:position_names, position_names)
-      |> assign(:current_sub_uuid, current_sub["uuid"])
 
     ~H"""
     <style>
@@ -214,116 +197,26 @@ defmodule VtickWeb.SubstitutionLive do
         animation-fill-mode: both;
       }
 
-      .last .logocontainer {
+      .remove .logocontainer {
         animation: logoout 0.8s;
         animation-fill-mode: both;
 
       }
 
-      .last .namecontainer {
+      .remove .namecontainer {
         animation: nameout 0.8s;
         animation-fill-mode: both;
       }
     </style>
-    <%= if @current_sub_uuid do %>
-      <div
-        id={@current_sub_uuid}
-        class={"current absolute bottom-16 w-full flex justify-center font-display #{@current_sub_uuid}"}
-        phx-hook="Anim"
-      >
-        <div class="flex">
-          <div class="anim logocontainer w-32 h-32 bg-vbldarkblue relative">
-            <img class="anim icon absolute inset-4 w-24 h-24" src="/images/substitution.svg" />
-            <img
-              class="anim logo absolute inset-4 w-24 h-24"
-              src={@player_out["team"]["logoImage200"]}
-            />
-          </div>
-          <div class="mask h-32">
-            <div class="anim namecontainer">
-              <div class="anim playerout">
-                <div class="anim name h-16 bg-vbldarkblue text-white flex items-center text-2xl">
-                  <strong class="mx-6"><%= @player_out["jerseyNumber"] %></strong>
-                  <span class="mr-8">
-                    <%= @player_out["firstName"] %> <%= @player_out["lastName"] %>
-                  </span>
-                </div>
-                <div class="anim position h-16 bg-vblgray text-vbldarkblue flex items-center text-2xl">
-                  <span class="ml-6 mr-8">
-                    <%= if Map.has_key?(@position_names, @player_out["position"]),
-                      do: @position_names[@player_out["position"]],
-                      else: @player_out["team"]["name"] %>
-                  </span>
-                </div>
-              </div>
-              <div class="anim playerin">
-                <div class="h-16 bg-vblgreen text-white flex items-center text-2xl">
-                  <strong class="mx-6"><%= @player_in["jerseyNumber"] %></strong>
-                  <span class="mr-8">
-                    <%= @player_in["firstName"] %> <%= @player_in["lastName"] %>
-                  </span>
-                </div>
-                <div class="h-16 bg-vblgray text-vbldarkblue flex items-center text-2xl">
-                  <span class="ml-6 mr-8">
-                    <%= if Map.has_key?(@position_names, @player_in["position"]),
-                      do: @position_names[@player_in["position"]],
-                      else: @player_in["team"]["name"] %>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    <% end %>
-    <%= if @last_sub != nil do %>
-      <div class="last absolute bottom-16 w-full flex justify-center font-display ">
-        <div class="flex">
-          <div class="anim logocontainer w-32 h-32 p-4 bg-vbldarkblue relative">
-            <img
-              class="logo inset-4 w-24 h-24 absolute"
-              src={@last_player_out["team"]["logoImage200"]}
-            />
-          </div>
-          <div class="mask h-32">
-            <div class="anim namecontainer">
-              <div class="playerin">
-                <div class="h-16 bg-vblgreen text-white flex items-center text-2xl">
-                  <strong class="mx-6"><%= @last_player_in["jerseyNumber"] %></strong>
-                  <span class="mr-8">
-                    <%= @last_player_in["firstName"] %> <%= @last_player_in["lastName"] %>
-                  </span>
-                </div>
-                <div class="h-16 bg-vblgray text-vbldarkblue flex items-center text-2xl">
-                  <span class="ml-6 mr-8">
-                    <%= if Map.has_key?(@position_names, @last_player_in["position"]),
-                      do: @position_names[@last_player_in["position"]],
-                      else: @last_player_in["team"]["name"] %>
-                  </span>
-                </div>
-              </div>
-              <div class="namecontainer">
-                <div class="playerout">
-                  <div class="name h-16 bg-vbldarkblue text-white flex items-center text-2xl">
-                    <strong class="mx-6"><%= @last_player_out["jerseyNumber"] %></strong>
-                    <span class="mr-8">
-                      <%= @last_player_out["firstName"] %> <%= @last_player_out["lastName"] %>
-                    </span>
-                  </div>
-                  <div class="position h-16 bg-vblgray text-vbldarkblue flex items-center text-2xl">
-                    <span class="ml-6 mr-8">
-                      <%= if Map.has_key?(@position_names, @last_player_out["position"]),
-                        do: @position_names[@last_player_out["position"]],
-                        else: @last_player_out["team"]["name"] %>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    <% end %>
+    <div id="cards" phx-update="stream">
+      <VtickWeb.Components.Substitution.lower_third
+        :for={{id, sub} <- @streams.substitutions}
+        id={id}
+        player_in={@ticker |> Ticker.player(assigns.match_uuid, sub["playerInUuid"])}
+        player_out={@ticker |> Ticker.player(assigns.match_uuid, sub["playerOutUuid"])}
+        position_names={@position_names}
+      />
+    </div>
     """
   end
 
@@ -339,20 +232,21 @@ defmodule VtickWeb.SubstitutionLive do
         []
       end
 
-    substitutions = socket.assigns.substitutions |> :queue.join(:queue.from_list(new_events))
+    substitutions_queue =
+      socket.assigns.substitutions_queue |> :queue.join(:queue.from_list(new_events))
 
     socket =
       socket
       |> assign(:ticker, ticker)
-      |> assign(:substitutions, substitutions)
+      |> assign(:substitutions_queue, substitutions_queue)
       |> assign(
         :latest_event_uuid,
         new_events |> List.first(%{"uuid" => socket.assigns.latest_event_uuid}) |> Map.get("uuid")
       )
 
     # Restart the timer if there are new substitutions
-    if :queue.len(substitutions) == Enum.count(new_events) and Enum.count(new_events) > 0 do
-      Process.send_after(self(), :next, 8000)
+    if :queue.len(substitutions_queue) == Enum.count(new_events) and Enum.count(new_events) > 0 do
+      Process.send(self(), :next, [])
     end
 
     {:noreply, socket}
@@ -373,17 +267,24 @@ defmodule VtickWeb.SubstitutionLive do
   end
 
   def handle_info(:next, socket) do
-    {last, substitutions} =
-      case :queue.out(socket.assigns.substitutions) do
-        {{:value, sub}, substitutions} -> {sub, substitutions}
-        {:empty, substitutions} -> {nil, substitutions}
+    {next, substitutions_queue} =
+      case :queue.out(socket.assigns.substitutions_queue) do
+        {{:value, sub}, substitutions_queue} -> {sub, substitutions_queue}
+        {:empty, substitutions_queue} -> {nil, substitutions_queue}
       end
 
-    if :queue.len(substitutions) > 0 do
-      Process.send_after(self(), :next, 8000)
+    if :queue.len(substitutions_queue) > 0 do
+      Process.send_after(self(), :next, 10000)
     end
 
-    socket = socket |> assign(:last_sub, last) |> assign(:substitutions, substitutions)
+    socket =
+      if next != nil do
+        socket |> stream_insert(:substitutions, next)
+      else
+        socket
+      end
+
+    socket = socket |> assign(:substitutions_queue, substitutions_queue)
 
     {:noreply, socket}
   end

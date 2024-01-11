@@ -21,14 +21,12 @@ import "phoenix_html"
 import { Socket } from "phoenix"
 import { LiveSocket } from "phoenix_live_view"
 let Hooks = {
-    Anim: {
-        updated() {
-            let els = document.querySelectorAll(".anim");
-            els.forEach((el) => {
-                el.style.animation = 'none';
-                el.offsetHeight;
-                el.style.animation = null;
-            });
+    timeout: {
+        mounted() {
+            const timeout = parseInt(this.el.getAttribute("data-timeout"));
+            const removal = parseInt(this.el.getAttribute("data-removal"));
+            setTimeout(() => this.el.classList.add("remove"), timeout);
+            setTimeout(() => this.el.remove(), removal);
         }
     }
 }
