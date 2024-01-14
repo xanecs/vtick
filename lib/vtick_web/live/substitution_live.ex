@@ -4,19 +4,27 @@ defmodule VtickWeb.SubstitutionLive do
   alias Vtick.Ticker
   alias Vtick.MatchSelector
 
-  def mount(_params, _session, socket) do
+  def mount(params, _session, socket) do
     VtickWeb.Endpoint.subscribe("ticker")
     VtickWeb.Endpoint.subscribe("match_selector")
-    Process.send(self(), {:ticker, TickerState.get_state()}, [])
+
+    if params["debug"] do
+      Process.send(self(), {:ticker, TickerState.get_state()}, [])
+    end
+
     ticker = TickerState.get_state()
     match_uuid = MatchSelector.get_match_uuid()
     state = ticker |> Ticker.state(match_uuid)
 
     latest_event_uuid =
-      if state != nil do
-        state["eventHistory"] |> List.first(%{"uuid" => nil}) |> Map.get("uuid")
-      else
+      if params["debug"] do
         nil
+      else
+        if state != nil do
+          state["eventHistory"] |> List.first(%{"uuid" => nil}) |> Map.get("uuid")
+        else
+          nil
+        end
       end
 
     socket =
@@ -24,11 +32,9 @@ defmodule VtickWeb.SubstitutionLive do
       |> assign(:ticker, ticker)
       |> assign(:match_uuid, match_uuid)
       |> assign(:substitutions_queue, :queue.new())
-      |> assign(:latest_event_uuid, nil)
       |> stream_configure(:substitutions, dom_id: &"sub-#{Map.get(&1, "uuid")}")
       |> stream(:substitutions, [])
-
-    # |> assign(:latest_event_uuid, latest_event_uuid)
+      |> assign(:latest_event_uuid, latest_event_uuid)
 
     {:ok, socket}
   end
